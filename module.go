@@ -113,20 +113,11 @@ func NewServo(ctx context.Context, deps resource.Dependencies, name resource.Nam
 		conf.BaudRate = 1000000
 	}
 
-	serialOptions := serial.OpenOptions{
-		PortName:              conf.Port,
-		BaudRate:              uint(conf.BaudRate),
-		DataBits:              8,
-		StopBits:              1,
-		MinimumReadSize:       0,
-		InterCharacterTimeout: 100,
-	}
-	serial, err := serial.Open(serialOptions)
+	net, err := getOrCreateNetwork(conf.Port, conf.BaudRate)
 	if err != nil {
-		return nil, fmt.Errorf("error opening serial port: %v\n", err)
+		return nil, err
 	}
 
-	net := network.New(serial)
 	svo, err := s_model.New(net, conf.Id)
 
 	err = svo.Ping()
