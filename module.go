@@ -52,6 +52,8 @@ func (cfg *Config) Validate(path string) ([]string, []string, error) {
 }
 
 func getOrCreateNetwork(port string, baudRate int) (*network.Network, error) {
+	// Cache key format: "{port}:{baudrate}" (e.g., "/dev/ttyUSB0:1000000")
+	// Servos can share a connection only if both port and baudrate match
 	portKey := fmt.Sprintf("%s:%d", port, baudRate)
 
 	portMutex.Lock()
@@ -119,6 +121,9 @@ func NewServo(ctx context.Context, deps resource.Dependencies, name resource.Nam
 	}
 
 	svo, err := s_model.New(net, conf.Id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create servo: %v", err)
+	}
 
 	err = svo.Ping()
 	if err != nil {
