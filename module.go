@@ -3,6 +3,7 @@ package dynamixel
 import (
 	"context"
 	"fmt"
+	"sync"
 
 	"go.uber.org/multierr"
 
@@ -18,6 +19,10 @@ import (
 
 var (
 	Servo = resource.NewModel("viam-labs", "dynamixel", "servo")
+
+	// Connection cache for shared serial ports
+	portConnections = make(map[string]*network.Network)
+	portMutex       sync.Mutex
 )
 
 func init() {
@@ -44,6 +49,38 @@ func (cfg *Config) Validate(path string) ([]string, []string, error) {
 	}
 
 	return nil, nil, nil
+}
+
+func getOrCreateNetwork(port string, baudRate int) (*network.Network, error) {
+	portKey := fmt.Sprintf("%s:%d", port, baudRate)
+
+	portMutex.Lock()
+	defer portMutex.Unlock()
+
+	// Check if network already exists
+	if net, exists := portConnections[portKey]; exists {
+		return net, nil
+	}
+
+	// Create new serial connection
+	serialOptions := serial.OpenOptions{
+		PortName:              port,
+		BaudRate:              uint(baudRate),
+		DataBits:              8,
+		StopBits:              1,
+		MinimumReadSize:       0,
+		InterCharacterTimeout: 100,
+	}
+	serialPort, err := serial.Open(serialOptions)
+	if err != nil {
+		return nil, fmt.Errorf("error opening serial port: %v", err)
+	}
+
+	// Create and cache network
+	net := network.New(serialPort)
+	portConnections[portKey] = net
+
+	return net, nil
 }
 
 type dynamixelServo struct {
