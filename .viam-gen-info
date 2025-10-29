@@ -1,0 +1,13 @@
+{
+  "module_name": "dynamixel",
+  "namespace": "viam-labs",
+  "language": "go",
+  "resource_type": "component",
+  "resource_subtype": "servo",
+  "model_name": "servo",
+  "enable_cloud_build": true,
+  "initialize_git": false,
+  "generator_version": "0.1.0",
+  "generated_on": "2025-10-28T16:15:20.008322Z",
+  "module_readme_link": "README.md"
+}
