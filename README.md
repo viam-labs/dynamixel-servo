@@ -26,6 +26,8 @@ The following attributes are available for this model:
 | `id` | int | Required  | The ID of the servo, might be `0` out of the box |
 | `baudrate` | int | Optional  | The baud rate for serial communication. Default is `1000000`. |
 
+Multiple servos can share the same port and baud rate to control them when connected in a series.
+
 #### Example Configuration
 
 ```json
