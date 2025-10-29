@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"dynamixel"
+	servo "go.viam.com/rdk/components/servo"
 	"go.viam.com/rdk/logging"
 	"go.viam.com/rdk/resource"
-	servo "go.viam.com/rdk/components/servo"
 )
 
 func main() {
