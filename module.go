@@ -193,6 +193,10 @@ func (s *dynamixelServo) DoCommand(ctx context.Context, cmd map[string]interface
 	}
 }
 
+func (s *dynamixelServo) Status(ctx context.Context) (map[string]interface{}, error) {
+	return map[string]interface{}{}, nil
+}
+
 func (s *dynamixelServo) IsMoving(ctx context.Context) (bool, error) {
 	moving, err := s.servo.Moving()
 	if err != nil {
