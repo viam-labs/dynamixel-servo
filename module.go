@@ -127,12 +127,12 @@ func NewServo(ctx context.Context, deps resource.Dependencies, name resource.Nam
 
 	err = svo.Ping()
 	if err != nil {
-		return nil, fmt.Errorf("Unable to ping servo: %v", err)
+		return nil, fmt.Errorf("unable to ping servo: %v", err)
 	}
 
 	err = svo.SetTorqueEnable(true)
 	if err != nil {
-		return nil, fmt.Errorf("Unable to enable torque on servo: %v", err)
+		return nil, fmt.Errorf("unable to enable torque on servo: %v", err)
 	}
 
 	cancelCtx, cancelFunc := context.WithCancel(context.Background())
@@ -203,6 +203,5 @@ func (s *dynamixelServo) IsMoving(ctx context.Context) (bool, error) {
 
 func (s *dynamixelServo) Close(ctx context.Context) error {
 	s.cancelFunc()
-	s.Stop(ctx, nil)
-	return nil
+	return s.Stop(ctx, nil)
 }
