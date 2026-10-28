@@ -201,6 +201,10 @@ func (s *dynamixelServo) IsMoving(ctx context.Context) (bool, error) {
 	return moving == 1, nil
 }
 
+func (s *dynamixelServo) Status(ctx context.Context) (map[string]interface{}, error) {
+	return map[string]interface{}{}, nil
+}
+
 func (s *dynamixelServo) Close(ctx context.Context) error {
 	s.cancelFunc()
 	s.Stop(ctx, nil)
